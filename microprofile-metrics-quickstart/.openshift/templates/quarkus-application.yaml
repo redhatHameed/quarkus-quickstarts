@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quarkus
+---
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    app: quarkus-quickstart
+  name: quarkus-quickstart
+  namespace: quarkus
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: quarkus-quickstart
+  name: quarkus-quickstart
+  namespace: quarkus
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: quarkus-quickstart:latest
+  source:
+    contextDir: microprofile-metrics-quickstart
+    git:
+      uri: https://github.com/nmalvankar/quarkus-quickstarts.git
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: redhat-openjdk18-openshift:1.5
+        namespace: openshift
+    type: Source
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: quarkus-quickstart
+  name: quarkus-quickstart
+  namespace: quarkus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quarkus-quickstart
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: quarkus-quickstart
+    spec:
+      containers:
+      - image: quarkus-quickstart
+        imagePullPolicy: IfNotPresent
+        name: quarkus-quickstart
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        - containerPort: 8778
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: quarkus-quickstart
+  name: quarkus-quickstart
+  namespace: quarkus
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: 8443-tcp
+    port: 8443
+    protocol: TCP
+    targetPort: 8443
+  - name: 8778-tcp
+    port: 8778
+    protocol: TCP
+    targetPort: 8778
+  selector:
+    app: quarkus-quickstart
+  type: ClusterIP
