@@ -94,3 +94,18 @@ spec:
   selector:
     app: quarkus-quickstart
   type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: quarkus-quickstart
+  name: quarkus-quickstart
+  namespace: quarkus
+spec:
+  port:
+    targetPort: 8080-tcp
+  to:
+    kind: Service
+    name: quarkus-quickstart
+
