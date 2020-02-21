@@ -32,7 +32,7 @@ spec:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: redhat-openjdk18-openshift:1.5
+        name: java:8
         namespace: openshift
     type: Source
 ---
