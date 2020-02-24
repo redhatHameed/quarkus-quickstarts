@@ -7,5 +7,5 @@ spec:
   groups:
   - name: quarkus-example
     rules:
-    - alert: VersionAlert
-      expr: version{job="quarkus-quickstart"} == 0
+    - alert: ProcessCPUTimeAlert
+      expr: vendor_cpu_processCpuTime_seconds{job="quarkus-quickstart"} > 8

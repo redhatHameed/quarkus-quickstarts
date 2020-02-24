@@ -36,8 +36,8 @@ spec:
         namespace: openshift
     type: Source
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: DeploymentConfig
 metadata:
   labels:
     app: quarkus-quickstart
@@ -46,12 +46,12 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app: quarkus-quickstart
+    deploymentConfig: quarkus-quickstart
   template:
     metadata:
       labels:
         app: quarkus-quickstart
+        deploymentConfig: quarkus-quickstart
     spec:
       containers:
       - image: quarkus-quickstart:latest
@@ -63,6 +63,15 @@ spec:
           protocol: TCP
         - containerPort: 8778
           protocol: TCP
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - quarkus-quickstart
+        from:
+          kind: ImageStreamTag
+          name: quarkus-quickstart:latest
+      type: ImageChange 
 ---
 apiVersion: v1
 kind: Service
