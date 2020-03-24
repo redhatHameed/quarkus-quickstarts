@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: quarkus-alert
+  namespace: quarkus
+spec:
+  groups:
+  - name: quarkus-example
+    rules:
+    - alert: ProcessCPUTimeAlert
+      expr: vendor_cpu_processCpuTime_seconds{job="quarkus-quickstart"} > 8
