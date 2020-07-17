@@ -26,7 +26,7 @@ spec:
   source:
     contextDir: microprofile-metrics-quickstart
     git:
-      uri: https://github.com/quarkusio/quarkus-quickstarts.git
+      uri: https://github.com/redhathameed/quarkus-quickstarts.git
     type: Git
   strategy:
     sourceStrategy:
