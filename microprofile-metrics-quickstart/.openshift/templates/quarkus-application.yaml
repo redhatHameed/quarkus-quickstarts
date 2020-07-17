@@ -32,7 +32,7 @@ spec:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: java:8
+        name: java:11
         namespace: openshift
     type: Source
 ---
